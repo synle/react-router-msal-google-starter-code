@@ -146,11 +146,12 @@ export function MainRootWrapper() {
           sx={{
             px: 4,
             py: 3,
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
           }}
         >
-          <Typography variant="h6" sx={{ marginBottom: 4 }}>
-            Welcome back.
-          </Typography>
+          <Typography variant="h6">Welcome back.</Typography>
           <Typography sx={{ marginBottom: 4 }}>
             You are not authenticated, please log in to continue.
           </Typography>
@@ -161,6 +162,15 @@ export function MainRootWrapper() {
               href="/api/auth/login?mode=aad"
             >
               Log in with Microsoft
+            </Button>
+          </Box>
+          <Box>
+            <Button
+              variant="contained"
+              component={Link}
+              href="/api/auth/login?mode=google"
+            >
+              Log in with Google
             </Button>
           </Box>
         </Paper>
