@@ -155,8 +155,12 @@ export function MainRootWrapper() {
             You are not authenticated, please log in to continue.
           </Typography>
           <Box>
-            <Button variant="contained" component={Link} href="/api/auth/login">
-              Log in
+            <Button
+              variant="contained"
+              component={Link}
+              href="/api/auth/login?mode=aad"
+            >
+              Log in with Microsoft
             </Button>
           </Box>
         </Paper>
