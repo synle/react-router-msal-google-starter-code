@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { ActionFunctionArgs } from "react-router";
 import { redirect } from "react-router";
-import { SCOPE, confidentialClientApplication } from "~/utils/backend/SSO";
+import { getAuthAccessTokenFromCode } from "~/utils/backend/SSO.AAD";
 import { commitSession, getSession } from "~/utils/backend/Session";
 
 async function _getUserInformation(accessToken: string) {
@@ -23,19 +23,12 @@ export async function action({ request }: ActionFunctionArgs) {
   const formData = new URLSearchParams(await request.text());
 
   try {
-    const url = new URL(request.url);
-    const redirectUri = process.env.AAD_REDIRECT_URL
-      ? process.env.AAD_REDIRECT_URL
-      : formData.get("state") || "";
+    const redirectUri = formData.get("state") || "";
 
-    const response = await confidentialClientApplication.acquireTokenByCode({
-      scopes: SCOPE,
-      redirectUri,
-      ...{
-        code: formData.get("code") || "",
-        client_info: formData.get("client_info") || "",
-        session_state: formData.get("session_state") || "",
-      },
+    const response = await getAuthAccessTokenFromCode(redirectUri, {
+      code: formData.get("code") || "",
+      client_info: formData.get("client_info") || "",
+      session_state: formData.get("session_state") || "",
     });
 
     const { accessToken } = response;
