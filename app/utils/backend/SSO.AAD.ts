@@ -1,7 +1,7 @@
 import type { AuthorizationCodeRequest } from "@azure/msal-node";
 import { ConfidentialClientApplication } from "@azure/msal-node";
 import axios from "axios";
-import { LOGIN_CALLBACK_URL } from "~/utils/backend/SSO";
+import { getLoginCallbackUrl } from "~/utils/backend/SSO";
 
 // configs for SSO
 export const BASE_API_HOST = process.env.AAD_BASE_HOST_URL;
@@ -54,21 +54,7 @@ export const confidentialClientApplication = new ConfidentialClientApplication(
 );
 
 export async function getLoginUrl(requestUrl: string) {
-  let redirectUri = "";
-  if (BASE_API_HOST) {
-    redirectUri = BASE_API_HOST;
-  } else {
-    try {
-      const url = new URL(requestUrl);
-      redirectUri = process.env.AAD_REDIRECT_URL
-        ? process.env.AAD_REDIRECT_URL
-        : url.host.includes("localhost")
-          ? `${url.protocol}//${url.host}`
-          : `https://${url.host}`;
-    } catch (err) {}
-  }
-
-  redirectUri = `${redirectUri}${LOGIN_CALLBACK_URL}`;
+  const redirectUri = getLoginCallbackUrl(requestUrl, BASE_API_HOST);
 
   try {
     const loginUrl = await confidentialClientApplication.getAuthCodeUrl({
