@@ -6,18 +6,18 @@ import {
 } from "~/utils/backend/SSO.AAD";
 import {
   getAuthAccessTokenFromCode as getGoogleAuthAccessTokenFromCode,
-  getUserInfo as getGoogleUserInfo
+  getUserInfo as getGoogleUserInfo,
 } from "~/utils/backend/SSO.Google";
 import { commitSession, getSession } from "~/utils/backend/Session";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // for Google login as it's a GET
   const url = new URL(request.url);
-  const code = url.searchParams.get("code") ||'';
-  const scope = url.searchParams.get("scope") ||'';
-  const authuser = url.searchParams.get("authuser") ||'';
-  const prompt = url.searchParams.get("prompt") ||'';
-  const state = url.searchParams.get("state") ||'';
+  const code = url.searchParams.get("code") || "";
+  const scope = url.searchParams.get("scope") || "";
+  const authuser = url.searchParams.get("authuser") || "";
+  const prompt = url.searchParams.get("prompt") || "";
+  const state = url.searchParams.get("state") || "";
 
   const redirectUri = state || "";
 
@@ -25,18 +25,29 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const response = await getGoogleAuthAccessTokenFromCode(redirectUri, code);
     const tokens = response.tokens;
 
-    const user = await getGoogleUserInfo(tokens.access_token || '');
-    console.log(user);
-    return user
+    const me = await getGoogleUserInfo(tokens);
+
+    // set cookies
+    const session = await getSession(request.headers.get("Cookie"));
+    session.set("access_token", tokens);
+    session.set("me", {
+      ...me,
+      provider: "google",
+    });
+
+    return redirect(`/`, {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     // return redirect('/');
     return new Response(`Failed to authenticate - ${err}`, {
       status: 400,
     });
   }
 }
-
 
 export async function action({ request }: ActionFunctionArgs) {
   // for AAD login as it's a POST
@@ -57,7 +68,10 @@ export async function action({ request }: ActionFunctionArgs) {
     // set cookies
     const session = await getSession(request.headers.get("Cookie"));
     session.set("access_token", accessToken);
-    session.set("me", me);
+    session.set("me", {
+      ...me,
+      provider: "aad",
+    });
 
     return redirect(`/`, {
       headers: {

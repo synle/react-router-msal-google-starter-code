@@ -1,13 +1,24 @@
+import type { Credentials } from "google-auth-library";
 import { OAuth2Client } from "google-auth-library";
 import { google } from "googleapis";
 import { getLoginCallbackUrl } from "~/utils/backend/SSO";
+
+interface UserInfo {
+  id: string;
+  email: string;
+  verified_email: boolean;
+  name: string;
+  given_name: string;
+  family_name: string;
+  picture: string;
+}
 
 // configs for SSO
 export const BASE_API_HOST = process.env.AAD_BASE_HOST_URL;
 
 export const SCOPE = [
-  "https://www.googleapis.com/auth/gmail.readonly", // Read Gmail messages
-  "https://www.googleapis.com/auth/userinfo.email", // Access email address
+  "https://www.googleapis.com/auth/userinfo.email",
+  "https://www.googleapis.com/auth/userinfo.profile",
   "openid", // OpenID authentication
 ];
 
@@ -57,20 +68,17 @@ export async function getAuthAccessTokenFromCode(
   return oAuth2Client.getToken(code);
 }
 
-export async function getUserInfo(accessToken: string) {
+export async function getUserInfo(tokens: Credentials) {
   const oAuth2Client = new OAuth2Client(
     credentials.client_id,
     credentials.client_secret,
   );
+  oAuth2Client.setCredentials(tokens);
 
-  oAuth2Client.setCredentials(accessToken);
-
-  const gmail = google.gmail({
-    version: "v1",
+  const oauth2 = google.oauth2({
     auth: oAuth2Client,
+    version: "v2",
   });
 
-  return gmail.users.getProfile({
-    userId: 'me'
-  });
+  return (await oauth2.userinfo.get()).data as UserInfo;
 }
