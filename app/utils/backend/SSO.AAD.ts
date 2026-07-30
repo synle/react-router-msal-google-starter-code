@@ -49,9 +49,7 @@ if (CERT_THUBMPRINT.length === 40 && CERT_PRIVATE_KEY) {
 }
 
 // msal init
-export const confidentialClientApplication = new ConfidentialClientApplication(
-  msalConfigs,
-);
+export const confidentialClientApplication = new ConfidentialClientApplication(msalConfigs);
 
 export async function getLoginUrl(requestUrl: string) {
   const redirectUri = getLoginCallbackUrl(requestUrl, BASE_API_HOST);
@@ -82,15 +80,12 @@ export async function getAuthAccessTokenFromCode(
 
 export async function getUserInfo(accessToken: string) {
   // do the me api to get profile
-  const { data: userInfo } = await axios.get(
-    `https://graph.microsoft.com/v1.0/me`,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        Accept: "application/json",
-      },
+  const { data: userInfo } = await axios.get(`https://graph.microsoft.com/v1.0/me`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      Accept: "application/json",
     },
-  );
+  });
 
   return userInfo;
 }

@@ -156,20 +156,12 @@ export function MainRootWrapper() {
             You are not authenticated, please log in to continue.
           </Typography>
           <Box>
-            <Button
-              variant="contained"
-              component={Link}
-              href="/api/auth/login?mode=aad"
-            >
+            <Button variant="contained" component={Link} href="/api/auth/login?mode=aad">
               Log in with Microsoft
             </Button>
           </Box>
           <Box>
-            <Button
-              variant="contained"
-              component={Link}
-              href="/api/auth/login?mode=google"
-            >
+            <Button variant="contained" component={Link} href="/api/auth/login?mode=google">
               Log in with Google
             </Button>
           </Box>
@@ -258,9 +250,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   if (isRouteErrorResponse(error)) {
     message = error.status === 404 ? "404" : "Error";
     details =
-      error.status === 404
-        ? "The requested page could not be found."
-        : error.statusText || details;
+      error.status === 404 ? "The requested page could not be found." : error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;

@@ -33,11 +33,7 @@ function createInMemorySessionStorage({ cookie }: SessionStorageOptions) {
     async readData(id: string): Promise<SessionData | null> {
       return _data[id] || null;
     },
-    async updateData(
-      id: string,
-      data: SessionData,
-      expires?: Date,
-    ): Promise<void> {
+    async updateData(id: string, data: SessionData, expires?: Date): Promise<void> {
       _data[id] = data;
     },
     async deleteData(id: string): Promise<void> {
@@ -66,11 +62,7 @@ function createRedisSessionStorage({ cookie }: SessionStorageOptions) {
       const data = await redis?.get(id);
       return data ? JSON.parse(data) : null;
     },
-    async updateData(
-      id: string,
-      data: SessionData,
-      expires?: Date,
-    ): Promise<void> {
+    async updateData(id: string, data: SessionData, expires?: Date): Promise<void> {
       const expireTime = expires ? Math.floor(expires.getTime() / 1000) : 0;
       await redis?.set(id, JSON.stringify(data), "EX", expireTime);
     },

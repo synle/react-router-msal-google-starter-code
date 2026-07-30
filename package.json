@@ -7,7 +7,8 @@
     "dev": "cross-env NODE_ENV=development node server.js",
     "start": "node server.js",
     "typecheck": "react-router typegen && tsc -b",
-    "format": "prettier --write --list-different '**/*.{json,js,jsx,tsx,ts,json,scss,mjs,html,md}'"
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check ."
   },
   "dependencies": {
     "@azure/msal-node": "^2.16.2",
@@ -43,7 +44,7 @@
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.1",
     "cross-env": "^7.0.3",
-    "prettier": "^3.5.3",
+    "oxfmt": "^0.61.0",
     "typescript": "^5.7.2",
     "vite": "^5.4.11",
     "vite-tsconfig-paths": "^5.1.4"

@@ -20,11 +20,7 @@ export default function () {
         <h2>
           {new Date().toLocaleString()} - {Date.now()}
         </h2>
-        {isLoading ? (
-          <h3>Loading...</h3>
-        ) : (
-          <pre>{JSON.stringify(profile, null, 2)}</pre>
-        )}
+        {isLoading ? <h3>Loading...</h3> : <pre>{JSON.stringify(profile, null, 2)}</pre>}
       </Box>
       <Box>
         <Button

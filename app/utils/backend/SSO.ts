@@ -1,9 +1,6 @@
 export const LOGIN_CALLBACK_URL = "/api/auth/login_callback";
 
-export function getLoginCallbackUrl(
-  requestUrl: string,
-  targetRedirectUri?: string,
-) {
+export function getLoginCallbackUrl(requestUrl: string, targetRedirectUri?: string) {
   let redirectUri = "";
   if (targetRedirectUri) {
     redirectUri = targetRedirectUri;

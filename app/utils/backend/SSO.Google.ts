@@ -26,22 +26,14 @@ const credentials = {
   client_id: process.env["GOOGLE_SSO_CLIENT_ID"] ?? "",
   client_secret: process.env["GOOGLE_SSO_CLIENT_VALUE"] ?? "",
   redirect_uris: [process.env["GOOGLE_BASE_HOST_URL"]],
-  auth_uri:
-    process.env["GOOGLE_SSO_AUTH_URI"] ||
-    "https://accounts.google.com/o/oauth2/auth",
-  token_uri:
-    process.env["GOOGLE_SSO_TOKEN_URI"] ||
-    "https://oauth2.googleapis.com/token",
+  auth_uri: process.env["GOOGLE_SSO_AUTH_URI"] || "https://accounts.google.com/o/oauth2/auth",
+  token_uri: process.env["GOOGLE_SSO_TOKEN_URI"] || "https://oauth2.googleapis.com/token",
   auth_provider_x509_cert_url:
     process.env["GOOGLE_SSO_AUTH_PROVIDER_X509_CERT_URL"] ||
     "https://www.googleapis.com/oauth2/v1/certs",
 };
 
-export async function getLoginUrl(
-  requestUrl: string,
-  scope = SCOPE,
-  access_type = "offline",
-) {
+export async function getLoginUrl(requestUrl: string, scope = SCOPE, access_type = "offline") {
   const redirectUri = getLoginCallbackUrl(requestUrl, BASE_API_HOST);
   const oAuth2Client = new OAuth2Client(
     credentials.client_id,
@@ -55,10 +47,7 @@ export async function getLoginUrl(
   });
 }
 
-export async function getAuthAccessTokenFromCode(
-  redirectUri: string,
-  code: string,
-) {
+export async function getAuthAccessTokenFromCode(redirectUri: string, code: string) {
   const oAuth2Client = new OAuth2Client(
     credentials.client_id,
     credentials.client_secret,
@@ -69,10 +58,7 @@ export async function getAuthAccessTokenFromCode(
 }
 
 export async function getUserInfo(tokens: Credentials) {
-  const oAuth2Client = new OAuth2Client(
-    credentials.client_id,
-    credentials.client_secret,
-  );
+  const oAuth2Client = new OAuth2Client(credentials.client_id, credentials.client_secret);
   oAuth2Client.setCredentials(tokens);
 
   const oauth2 = google.oauth2({
