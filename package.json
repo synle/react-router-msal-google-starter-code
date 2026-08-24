@@ -8,7 +8,8 @@
     "start": "node server.js",
     "typecheck": "react-router typegen && tsc -b",
     "format": "oxfmt --write .",
-    "format:check": "oxfmt --check ."
+    "format:check": "oxfmt --check .",
+    "lint": "npx oxlint ."
   },
   "dependencies": {
     "@azure/msal-node": "^2.16.2",
