@@ -3,7 +3,6 @@ import { ConfidentialClientApplication } from "@azure/msal-node";
 import axios from "axios";
 import { getLoginCallbackUrl } from "~/utils/backend/SSO";
 
-// configs for SSO
 export const BASE_API_HOST = process.env.AAD_BASE_HOST_URL;
 
 const TENANT_ID = process.env["AAD_SSO_TENANT_ID"] ?? "common";
@@ -33,7 +32,6 @@ const msalConfigs = {
   },
 };
 
-// setting up auth mode
 if (CERT_THUBMPRINT.length === 40 && CERT_PRIVATE_KEY) {
   // https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-node/docs/certificate-credentials.md
   //@ts-ignore
@@ -48,7 +46,6 @@ if (CERT_THUBMPRINT.length === 40 && CERT_PRIVATE_KEY) {
   console.log("AAD Configs missing either `clientSecret` or `certificate`");
 }
 
-// msal init
 export const confidentialClientApplication = new ConfidentialClientApplication(msalConfigs);
 
 export async function getLoginUrl(requestUrl: string) {
@@ -79,7 +76,6 @@ export async function getAuthAccessTokenFromCode(
 }
 
 export async function getUserInfo(accessToken: string) {
-  // do the me api to get profile
   const { data: userInfo } = await axios.get(`https://graph.microsoft.com/v1.0/me`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,

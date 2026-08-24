@@ -27,7 +27,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
     const me = await getGoogleUserInfo(tokens);
 
-    // set cookies
     const session = await getSession(request.headers.get("Cookie"));
     session.set("access_token", tokens);
     session.set("me", {
@@ -64,7 +63,6 @@ export async function action({ request }: ActionFunctionArgs) {
     const { accessToken } = response;
     const me = await getAADUserInfo(accessToken);
 
-    // set cookies
     const session = await getSession(request.headers.get("Cookie"));
     session.set("access_token", accessToken);
     session.set("me", {

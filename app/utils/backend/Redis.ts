@@ -1,4 +1,4 @@
-import Redis from "ioredis"; // Redis client
+import Redis from "ioredis";
 
 function _parseRedisConnectionString(connectionString?: string) {
   try {
@@ -33,7 +33,6 @@ export function getRedisConnection() {
     return null;
   }
 
-  // Initialize Redis client using environment variable
   const redis = new Redis({
     host: redisConfig["host"],
     port: redisConfig["port"],

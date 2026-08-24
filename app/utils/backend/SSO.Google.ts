@@ -13,13 +13,12 @@ interface UserInfo {
   picture: string;
 }
 
-// configs for SSO
 export const BASE_API_HOST = process.env.AAD_BASE_HOST_URL;
 
 export const SCOPE = [
   "https://www.googleapis.com/auth/userinfo.email",
   "https://www.googleapis.com/auth/userinfo.profile",
-  "openid", // OpenID authentication
+  "openid",
 ];
 
 const credentials = {
