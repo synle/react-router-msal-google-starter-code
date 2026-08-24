@@ -34,7 +34,6 @@ import type { Route } from "./+types/root";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // notifyOnChangeProps: 'tracked',
       refetchOnWindowFocus: false,
       staleTime: 1000 * 60 * 5,
       retry: (failureCount, error?: any) => {

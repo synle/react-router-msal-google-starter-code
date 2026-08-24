@@ -20,7 +20,6 @@ function _getNewSessionId() {
 }
 
 function createInMemorySessionStorage({ cookie }: SessionStorageOptions) {
-  // Configure your database client...
   let _data: Record<string, SessionData> = {};
 
   return createSessionStorage({
@@ -43,7 +42,6 @@ function createInMemorySessionStorage({ cookie }: SessionStorageOptions) {
 }
 
 function createRedisSessionStorage({ cookie }: SessionStorageOptions) {
-  // Initialize Redis client using environment variable
   const redis = getRedisConnection();
 
   return createSessionStorage({
@@ -51,10 +49,8 @@ function createRedisSessionStorage({ cookie }: SessionStorageOptions) {
     async createData(data: SessionData, expires?: Date): Promise<string> {
       const sessionId = _getNewSessionId();
 
-      // Calculate expiration time based on the 'expires' date (convert to seconds)
       const expireTime = expires ? Math.floor(expires.getTime() / 1000) : 0;
 
-      // Store data in Redis with the session ID as the key
       await redis?.set(sessionId, JSON.stringify(data), "EX", expireTime);
       return sessionId;
     },

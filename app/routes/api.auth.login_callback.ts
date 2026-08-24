@@ -42,7 +42,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     });
   } catch (err) {
     console.log(err);
-    // return redirect('/');
     return new Response(`Failed to authenticate - ${err}`, {
       status: 400,
     });
